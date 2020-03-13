@@ -13,12 +13,9 @@
 //
 // You should have received a copy of the GNU Affero General Public License
 
-extern crate codechain_module as cmodule;
+extern crate proc_macro;
 
-pub mod execution;
-pub mod ipc;
-mod link;
-pub mod sandbox;
-pub mod sandboxer;
-mod test;
-pub mod api;
+pub mod example;
+
+use proc_macro::TokenStream;
+use syn::parse_macro_input;
