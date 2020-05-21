@@ -5,7 +5,7 @@ use parking_lot::Mutex;
 use std::path::Path;
 use std::sync::Arc;
 
-impl Receiver for dyn IpcSend {
+impl<T> Receiver for T where T: IpcSend {
     fn receive(&mut self, message: Box<dyn AsRef<[u8]>>) {
         self.send((*message).as_ref())  
     }
@@ -35,8 +35,11 @@ impl Port for ProcPort {
         self
     }
 
-    fn receiver(&self) -> Arc<dyn Receiver> {
-        panic!()
+    fn receiver(&mut self) -> Arc<dyn Receiver> {
+        let v = self.send.take().expect("You already linked this port").into_inner();
+        let g: Box<dyn Receiver> = Box::new(*v);
+        
+        Arc::from(v)
     }
 
     fn link(&mut self, receiver: Arc<dyn Receiver>) {}

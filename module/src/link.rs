@@ -83,7 +83,7 @@ pub trait Port: CastFromSync {
     ///
     /// [`Receiver`]: ./trait.Receiver.html
     /// [`Linkable`]: ./trait.Linkable.html
-    fn receiver(&self) -> Arc<dyn Receiver>;
+    fn receiver(&mut self) -> Arc<dyn Receiver>;
 
     /// Links with another [`Linkable`] by passing in a [`Receiver`] taken from the [`Linkable`]
     /// in the opposite side.
