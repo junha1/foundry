@@ -21,9 +21,6 @@ impl Sandboxer for ProcSandboxer {
         init: &[u8],
         exports: &[(&str, &[u8])],
     ) -> Result<Arc<dyn Sandbox>> {
-
-
         panic!()
     }
 }
-
