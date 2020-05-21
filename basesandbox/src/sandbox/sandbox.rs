@@ -5,9 +5,9 @@ use parking_lot::Mutex;
 use std::path::Path;
 use std::sync::Arc;
 
-impl IpcSend for Box<dyn Receiver> {
-    fn send(&self, data: &[u8]) {
-        self.receive(Box::new(data))
+impl Receiver for dyn IpcSend {
+    fn receive(&mut self, message: Box<dyn AsRef<[u8]>>) {
+        self.send((*message).as_ref())  
     }
 }
 
