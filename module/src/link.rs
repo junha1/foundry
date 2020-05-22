@@ -69,12 +69,16 @@ pub trait Port: CastFromSync {
     /// creation. The `ids` are indices into a list of service objects created when the module
     /// owning this port is loaded into a sandbox.CBOR map fed
     /// to the constructor function.
+    ///
+    /// Note that you must pass empty ids even if this port has nothing to export.
     fn export(&mut self, ids: &[usize]) -> &mut dyn Port;
 
     /// Sets to which slots the handles received from the other end are to be assigned.
     ///
     /// This way, a module can't assign to an arbitrary slot in the other end.
     /// Only to the slots set by the host.
+    ///
+    /// Note that you must pass empty slots even if this port has nothing to import.
     fn import(&mut self, slots: &[&str]) -> &mut dyn Port;
 
     /// Returns the [`Receiver`] for placing messages into the [`Linkable`] this `Port` is
@@ -83,7 +87,7 @@ pub trait Port: CastFromSync {
     ///
     /// [`Receiver`]: ./trait.Receiver.html
     /// [`Linkable`]: ./trait.Linkable.html
-    fn receiver(&self) -> Arc<dyn Receiver>;
+    fn receiver(&mut self) -> Box<dyn Receiver>;
 
     /// Links with another [`Linkable`] by passing in a [`Receiver`] taken from the [`Linkable`]
     /// in the opposite side.
@@ -95,14 +99,14 @@ pub trait Port: CastFromSync {
     /// [`Linkable`]: ./trait.Linkable.html
     /// [`export`]: #tymethod.export
     /// [`import`]: #tymethod.import
-    fn link(&mut self, receiver: Arc<dyn Receiver>);
+    fn link(&mut self, receiver: Box<dyn Receiver>);
 }
 
 /// An endpoint implemented by a [`Linkable`] for receiving incoming calls
 /// from another [`Linkable`].
 ///
 /// [`Linkable`]: ./trait.Linkable.html
-pub trait Receiver {
+pub trait Receiver: Send {
     /// Places the given message (`[u8]`) and returns immediately.
     /// The `message` is typed `Box<dyn AsRef<[u8]>>` to allow for zero copy sending
     /// as much as possible. The intention is to wrap various types as they are if they
