@@ -1,0 +1,13 @@
+[package]
+name = "codechain-ibc"
+version = "0.1.0"
+authors = ["CodeChain Team <hi@codechain.io>"]
+edition = "2018"
+
+[dependencies]
+primitives = { git = "https://github.com/CodeChain-io/rust-codechain-primitives.git", version = "0.4" }
+lazy_static = "1.4"
+serde_cbor = "0.11.1"
+serde = { version = "1.0", features = ["derive"] }
+serde_derive = "1.0.105"
+codechain-crypto = { git = "https://github.com/CodeChain-io/rust-codechain-crypto.git", version = "0.2" }

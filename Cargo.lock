@@ -451,6 +451,18 @@ dependencies = [
 ]
 
 [[package]]
+name = "codechain-ibc"
+version = "0.1.0"
+dependencies = [
+ "codechain-crypto",
+ "lazy_static 1.4.0",
+ "primitives",
+ "serde",
+ "serde_cbor",
+ "serde_derive",
+]
+
+[[package]]
 name = "codechain-informer"
 version = "0.1.0"
 dependencies = [

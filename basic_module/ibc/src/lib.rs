@@ -18,3 +18,7 @@ pub trait IbcEncoder {
 // Application layer data will be also encoded/verified by the light client.
 // However, that is not required for all light client as it varies among the application.
 // Those specified services are minimum requirements that all light client module must keep.
+<<<<<<< HEAD
+=======
+
+>>>>>>> d0f5aa6e3... [WIP] Design IBC module
