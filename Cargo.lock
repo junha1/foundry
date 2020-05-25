@@ -350,7 +350,6 @@ name = "codechain-basesandbox"
 version = "0.1.0"
 dependencies = [
  "codechain-crypto",
- "codechain-module",
  "crossbeam 0.7.3",
  "hex",
  "ipc-channel",
@@ -571,11 +570,15 @@ dependencies = [
 name = "codechain-module"
 version = "0.1.0"
 dependencies = [
+ "codechain-basesandbox",
  "intertrait",
  "linkme",
  "once_cell",
+ "parking_lot 0.6.4",
  "primitives",
  "serde",
+ "serde_cbor",
+ "serde_derive",
  "thiserror",
 ]
 

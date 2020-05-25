@@ -1,8 +1,8 @@
-use codechain_module::link::{Linkable, Port};
-use codechain_module::sandbox::{Error, Result, Sandbox, Sandboxer};
+use super::sandbox::ProcSandbox;
+use crate::link::{Linkable, Port};
+use crate::sandbox::{Error, Result, Sandbox, Sandboxer};
 use std::path::Path;
 use std::sync::Arc;
-use super::sandbox::ProcSandbox;
 
 /// ProcSandboxer is actually one of the useless case of Sandboxer.
 /// We don't have to keep something extra to execute an Unix process.
@@ -24,6 +24,14 @@ impl Sandboxer for ProcSandboxer {
         init: &[u8],
         exports: &[(&str, &[u8])],
     ) -> Result<Arc<dyn Sandbox>> {
-        Ok(Arc::new(ProcSandbox::new(path, id_map, init, exports)))
+        Ok(Arc::new(ProcSandbox::<cbsb::ipc::servo_channel::ServoChannel, cbsb::execution::executor::Executable>::new(
+            path, id_map, init, exports,
+        )))
     }
+}
+
+#[cfg(test)]
+mod test {
+    use super::super::sandbox::*;
+    use super::*;
 }

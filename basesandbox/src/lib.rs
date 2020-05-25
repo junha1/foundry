@@ -16,4 +16,3 @@
 
 pub mod execution;
 pub mod ipc;
-pub mod sandbox;
