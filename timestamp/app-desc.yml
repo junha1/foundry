@@ -1,0 +1,94 @@
+default-sandboxer: single-process
+modules:
+  module-account:
+    hash: 1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef
+    sandboxer: multi-process
+    exports:
+      service.stateful:
+        stateful: {}
+      service.account-manager-token:
+        account-manager: {}
+      service.account-manager-stamp:
+        account-manager: {}
+      get-seq:
+        get-seq: {}
+    imports: {}
+    transactions: {}
+    init-config:
+      thread-pool-size: 16
+    genesis-config: {}
+    tags:
+      previliged: true
+
+  module-staking:
+    hash: 2234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef
+    exports:
+      service.init-genesis:
+        init-genesis: {}
+      service.init-chain:
+        init-chain: {}
+      service.update-chain:
+        update-chain: {}
+    init-config:
+      thread-pool-size: 16
+    genesis-config: {}
+    tags:
+      previliged: true
+
+  module-stamp:
+    hash: 3234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef
+    exports:
+      service.tx-owner:
+        tx-owner: {}
+      service.stateful:
+        stateful: {}
+      service.token-manager-staking:
+        token-manager: {}
+      service:token-manager-stamp:
+        token-manager: {}
+    imports:
+      import.account-manager: module-account/service.account-manager-stamp
+      import.token-manager: module-token/service.token-manager-stamp
+    init-config:
+      thread-pool-size: 16
+    genesis-config: {}
+    tags:
+      previliged: true
+  
+  module-token:
+    hash: 4234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef
+    exports:
+      service.tx-owner:
+        tx-owner: {}
+      service.init-genesis:
+        init-genesis: {}
+    imports:
+      import.account-manager: module-account/service.account-manager-token
+    init-config:
+      thread-pool-size: 16
+    genesis-config: {}
+    tags:
+      previliged: true
+    
+  module-sorter:
+    hash: 5234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef
+    exports:
+      service.tx-sorter:
+        tx-sorter: {}
+    imports: {}
+    transactions:
+      - get-seq
+    init-config:
+      thread-pool-size: 16
+    genesis-config: {}
+    tags:
+      previliged: true
+
+host: {}
+
+transactions:
+  tx.stamp: module-stamp
+  tx.transfer-token: module-token
+
+param-defaults:
+  hello: Annyeong Haseyo
