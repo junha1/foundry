@@ -74,7 +74,6 @@ fn test_query_variables() -> (HashMap<String, String>, String) {
         r#"{"data":{"account":{"balance":10}}}"#.to_owned(),
     )
 }
-
 #[actix_rt::test]
 async fn run_server() {
     let port = 4000;
@@ -135,4 +134,25 @@ async fn request_post_with_variables() {
     let response_bytes = request.send_body(body).await.unwrap().body().await.unwrap();
     let response = std::str::from_utf8(&response_bytes).expect("GraphQL server must return utf8-encoded string");
     assert_eq!(response, expected);
+}
+
+#[test]
+fn with_explicit_runtime() {
+    let sys = actix_rt::System::new("Foundry GraphQL");
+    let port = 4005;
+    create_server(port);
+
+    let mut rt = tokio::runtime::Runtime::new().unwrap();
+    rt.block_on(async {
+        let client = Client::new();
+        let (query, expected) = test_query();
+        let request = client.get(&format!("http://localhost:{}/module1/graphql", port)).query(&query).unwrap();
+        let response_bytes = request.send().await.unwrap().body().await.unwrap();
+        let response = std::str::from_utf8(&response_bytes).expect("GraphQL server must return utf8-encoded string");
+        assert_eq!(response, expected);
+    });
+
+    // TODO: Find out why these are needed. (It works well without these but raises a warning)
+    actix_rt::System::current().stop();
+    sys.run().unwrap();
 }

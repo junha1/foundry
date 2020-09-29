@@ -18,7 +18,6 @@ mod graphiql;
 mod handler;
 
 use actix_web::{
-    dev::Server,
     error::{ErrorBadRequest, ErrorNotFound},
     web,
     web::ServiceConfig,
@@ -99,7 +98,11 @@ pub fn app_configure(config: &mut ServiceConfig, server_data: Arc<ServerData>) {
         .service(web::resource("/{module_name}/__graphql").route(web::get().to(handle_graphiql)));
 }
 
-pub fn run_server(server_data: ServerData, addr: SocketAddr) -> Result<Server> {
+pub fn setup() {
+    actix_rt::System::new("Foundry GraphQL");
+}
+
+pub fn run_server(server_data: ServerData, addr: SocketAddr) -> Result<actix_web::dev::Server> {
     let server_data = Arc::new(server_data);
     let server = HttpServer::new(move || {
         App::new().configure(|config: &mut ServiceConfig| app_configure(config, Arc::clone(&server_data)))
