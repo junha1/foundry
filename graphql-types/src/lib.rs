@@ -14,9 +14,5 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-use ctypes::Header;
-use crate::block::Block as CBlock;
-
-pub struct Block {
-    cblock: CBlock
-}
+mod block;
+mod header;
