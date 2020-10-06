@@ -14,6 +14,8 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+mod block;
+
 use crate::BlockChainClient;
 use crate::Client;
 use async_graphql::{InputValueError, InputValueResult, Scalar, ScalarType, Value as GqlValue};
