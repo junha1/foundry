@@ -54,3 +54,24 @@ jobs:
       - run: cargo test --verbose --all
         env:
           RUST_BACKTRACE: 1
+
+  demo:
+    name: Actions - demo
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [macOS-latest, ubuntu-latest]
+    steps:
+      - uses: actions/checkout@v1
+        with:
+          fetch-depth: 1
+      - uses: actions-rs/toolchain@v1
+        with:
+          toolchain: 1.46.0
+          profile: minimal
+          override: true
+      - run: cargo fetch --verbose
+      - run: cargo build
+      - run: cargo test -p foundry-demo --manifest-path ./demo/Cargo.toml --features demo -- --test-threads=1
+        env:
+          RUST_BACKTRACE: 1
